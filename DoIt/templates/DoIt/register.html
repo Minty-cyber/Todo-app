@@ -1,0 +1,28 @@
+{% extends 'DoIt/base.html' %}
+{% block content %}
+<div class="header-section">
+    <h1>Register</h1>
+</div>
+
+<div class="card">
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="">{{form.username.label}}</label>
+        {{form.username}}
+
+        <label for="">{{form.password1.label}}</label>
+        {{form.password1}}
+
+        <label for="">{{form.password2.label}}</label>
+        {{form.password2}}
+        <input class="search-button" type="submit" value="Register"
+         style="display: block; margin: auto; margin-top: 10px;">
+    </form>
+    
+    <p>Already have an account?<i><a href="{% url 'login' %}" 
+        style="text-decoration: none;
+        font-size: larger; color: rgb(91, 17, 240);"> Login</a></i></p>
+</div>
+
+{% endblock content %}

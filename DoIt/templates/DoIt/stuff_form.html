@@ -1,0 +1,16 @@
+{% extends 'DoIt/base.html' %}
+{% block content %}
+
+<div class="header-section">
+    <a href="{% url 'stuffs' %}">&#8592; Back</a>
+</div>
+
+<div class="card">
+    <form method="POST" >
+        {% csrf_token %}
+        {{form.as_p}}
+        <input class="search-button" type="submit" value="Update">
+    </form>
+</div>
+
+{% endblock content %}

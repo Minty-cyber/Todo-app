@@ -1,0 +1,31 @@
+{% extends 'DoIt/base.html' %} {% block content %}
+<div class="header-section">
+  <h1>LogIn</h1>
+</div>
+<div class="card">
+  <form method="POST">
+    {% csrf_token %} {{form.as_p}}
+    <input
+      class="search-button"
+      type="submit"
+      value="login"
+      style="display: block; margin: auto"
+    />
+  </form>
+  <p>
+    Don't have an account?<i
+      ><a
+        style="
+          text-decoration: none;
+          font-size: larger;
+          color: rgb(91, 17, 240);
+        "
+        href="{% url 'register' %}"
+      >
+        Register</a
+      ></i
+    >
+  </p>
+</div>
+
+{% endblock content%}

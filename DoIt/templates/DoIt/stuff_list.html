@@ -1,0 +1,109 @@
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+{% extends 'DoIt/base.html' %}
+{% block content %}
+<div class="header-section">
+    <div>
+        <h1>Welcome, {{ request.user|title }}</h1>
+
+        {% if count == 0 %}
+            <h3 style="margin:0">You have completed all tasks, <span style="color: white;">GREAT JOB!</span></h3>
+        {% else %}
+            <h3 style="margin:0">You have <i>{{ count }}</i> incomplete task{{ count|pluralize:"s" }}</h3>
+        {% endif %}
+    </div>
+
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+        
+</div>
+
+
+
+
+<div id ="search-section">
+    <form method="GET" style="margin-top: 20px ;display: flex;">
+        <input type="text" name="search-area" value="{{search_input}}">
+        <input class="search-button" type="submit" value="Search">
+    </form>
+    <a id="add-icon" href="{% url 'stuff-create' %}">&#43;</a>
+</div>
+
+<!-- Hidden form. Form submits new item positions -->
+<form style="display: none;" id="reorderForm" method="post" action="{% url 'task-reorder' %}">
+    {% csrf_token %}
+    <input type="hidden" id="positionInput" name="position">
+</form>
+
+
+
+
+
+
+<div id="stufflist" class="stuff-items-rounder">
+    
+     
+    {% for stuff in list %}
+        <div class="stuff-rounder" data-position="{{stuff.pk}}">
+            
+            {% if stuff.completed %}
+                <div class="stuff-title">
+                    <div class="stuff-complete-icon">&#10003;</div>
+                        <i><s><a href="{% url 'stuff-update' stuff.id %}">{{stuff}}</a></s></i>
+                </div>
+                {% else %}
+                    <div class="stuff-title">
+                        <div class="stuff-incomplete-icon"></div>
+                            <a href="{% url 'stuff-update' stuff.id %}">{{stuff}}</a>
+                    </div>
+                    <div class="task-controls">
+                        <a class="delete-stuff" href="{% url 'stuff-delete' stuff.id %}">&#215;</a>
+                        <span class="handle">&nbsp;&#10247;</span>
+                    </div>
+           
+            {% endif %}
+                
+        </div>
+        {%empty%}
+        <div style="text-align: center; padding-bottom: 10px; line-height: 1em;">
+            <h3>Want to keep yourself organised?.</h3>
+            <h3>Create a <a style="text-decoration: none; color: #e53935;" href="{% url 'stuff-create' %}">New task</a> To keep you on TRACK! </h3>
+        </div>
+    {% endfor %}
+        
+</div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    var taskList = document.getElementById("stufflist");
+    var reorderForm = document.getElementById("reorderForm");
+    var positionInput = document.getElementById("positionInput");
+
+    let sortable = new Sortable(taskList, {
+        handle: '.handle',
+        ghostClass: 'dropArea',
+        chosenClass: 'selectedTask',
+        onUpdate: reordering,
+    });
+
+function reordering() {
+    const rows = document.getElementsByClassName("stuff-rounder");
+    let pos = [];
+    for (let row of rows) {
+        pos.push(row.dataset.position);
+    }
+    console.log(pos.join(","))
+    positionInput.value = pos.join(',');
+    reorderForm.submit();
+}
+
+})
+
+</script>
+
+{% endblock content %}
+    
