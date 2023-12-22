@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 
 
 class Stuff(models.Model):
-    id = models.IntegerField(primary_key=True)
-    user = models.ForeignKey(User, on_delete= models.CASCADE, null=True, blank=True)
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
     completed = models.BooleanField(default=False)
