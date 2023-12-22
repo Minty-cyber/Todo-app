@@ -2,4 +2,3 @@
 __pycache__/
 
 # Ignore __pycache__ directories in all app directories
-**/__pycache__/
